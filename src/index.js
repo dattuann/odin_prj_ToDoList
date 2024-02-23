@@ -16,7 +16,6 @@ const toDoList = (function () {
   }
   
   return { listArray, addToList, removeFromList }
-
 })()
 
 function saveToLocal() {
@@ -34,10 +33,14 @@ function loadFromLocal() {
     });
   }
 }
+function populateContainer() {
+  toDoList.listArray.forEach(element => {
+    createTDElement(element.content, element.date, element.finish, element.priority)
+  });
+}
 
 function createTDElement(content, date, finish, priority) {
   const container = document.querySelector('.container') 
-  const removeBtn = document.createElement('button')
   const toDoContainer = document.createElement('div')
   const contentDiv = document.createElement('div')
   const dateDiv = document.createElement('div')
@@ -49,43 +52,44 @@ function createTDElement(content, date, finish, priority) {
   
   dateDiv.classList.add("date_div") 
   dateDiv.textContent = date
+  
+  const removeBtn = document.createElement('button');
+  removeBtn.classList.add("remove_btn");
+  removeBtn.textContent = "remove";
 
-  removeBtn.classList.add("remove_btn")
-  removeBtn.textContent = "remove"
-
-  toDoContainer.append(dateDiv, contentDiv, removeBtn)
+  removeBtn.addEventListener('click', () => {
+    removeTDContainer(contentDiv.textContent, dateDiv.textContent, toDoContainer)
+  });
+  
+  toDoContainer.append(dateDiv, contentDiv, removeBtn )
   toDoContainer.classList.add('to_do_container')
   container.appendChild(toDoContainer)
 }
 
-function populateContainer() {
-  toDoList.listArray.forEach(element => {
-    createTDElement(element.content, element.date, element.finish, element.priority)
-  });
+function removeTDContainer(content, date, container) {
+  toDoList.removeFromList(content, date);
+  container.remove();
+  saveToLocal(); 
 }
 
-const mainInterFace = (function () {
+const dialogInterface = (function () {
   const dialogBtn = document.getElementById('dialog_btn')
   const submitBtn = document.getElementById('submit_btn')
   const contentInput = document.getElementById("content_input")
   const dateInput = document.getElementById("date_input")
   const priorityInput = document.getElementById("priority_input")
-  const removeBtn = document.querySelectorAll("#remove_btn")
-
+  const form = document.querySelector('form')
+  
   dialogBtn.addEventListener('click', () => {
     dialog.showModal() 
   })
-
-  removeBtn.forEach(button => {
-    button.addEventListener('click', () => {
-      return 
-    })
-  });
-
-  submitBtn.addEventListener('click', () => {
+  
+  submitBtn.addEventListener('click', (e) => {
+    e.preventDefault()
     if (contentInput.value) {
+      createTDElement(contentInput.value, dateInput.value, false, priorityInput.value)
       toDoList.addToList(contentInput.value, dateInput.value, false, priorityInput.value) 
-      console.log(toDoList.listArray)
+      form.reset()
       saveToLocal()
     }
   })
@@ -93,8 +97,6 @@ const mainInterFace = (function () {
 
 loadFromLocal()
 populateContainer()
-
-
 
 
 /* toDoList.addToList("hello", "14/05/2024", false, "urgent") 
