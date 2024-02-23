@@ -1,0 +1,7 @@
+body {
+  background-origin: padding-box;
+}
+
+.to_do_container {
+  border: 1px solid black;
+}

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8" />
+        <title>Webpack App</title>
+    </head>
+    <body>
+        <button id="dialog_btn">+</button>
+        <dialog id="dialog">
+          <form method="dialog">
+            <button formnovalidate autofocus>Close</button>
+            <input type="date" name="date_input" id="date_input">
+            <input type="text" name="content_input" id="content_input" placeholder="do this:" required>
+            <select name="priority" id="priority_input">
+              <option value="urgent">urgent</option>
+              <option value="chill" selected>chill</option>
+              <option value="relax">relax</option>
+            </select>
+            <input type="submit" value="Add ToDo" id="submit_btn">
+          </form>
+        </dialog>
+        <div class="container"></div>
+    </body>
+    
+</html>
