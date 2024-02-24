@@ -26,8 +26,8 @@ export const toDoList = (function () {
 
 export function saveToLocal() {
   const listArray = toDoList.listArray; 
-  const ListArrayJSON = JSON.stringify(listArray);
-  localStorage.setItem('UniqueToDoListKey', ListArrayJSON); 
+  const listArrayJson = JSON.stringify(listArray);
+  localStorage.setItem('UniqueToDoListKey', listArrayJson); 
 }
 
 function loadFromLocal() {
