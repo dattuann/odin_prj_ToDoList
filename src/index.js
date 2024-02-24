@@ -1,6 +1,8 @@
 import './style.css'
+import { format, secondsToHours } from 'date-fns'
+import createTDElement from './createTDElement'
 
-const toDoList = (function () {
+export const toDoList = (function () {
   let listArray = []
   
   function addToList(content, date, finish, priority) {
@@ -8,17 +10,21 @@ const toDoList = (function () {
     listArray.push(newToDo)
   }
   
-  function removeFromList(content, date) {
+  function findIndexInList(content, date, callback) {
     const index = listArray.findIndex(array => array.content === content && array.date === date)
     if (index != -1) {
-      listArray.splice(index, 1)
-    }
+      callback(index)
+    } 
+  }
+  
+  function removeFromList(content, date) {
+    findIndexInList(content, date, index => listArray.splice(index, 1)); 
   }
   
   return { listArray, addToList, removeFromList }
 })()
 
-function saveToLocal() {
+export function saveToLocal() {
   const listArray = toDoList.listArray; 
   const ListArrayJSON = JSON.stringify(listArray);
   localStorage.setItem('UniqueToDoListKey', ListArrayJSON); 
@@ -39,68 +45,57 @@ function populateContainer() {
   });
 }
 
-function createTDElement(content, date, finish, priority) {
-  const container = document.querySelector('.container') 
-  const toDoContainer = document.createElement('div')
-  const contentDiv = document.createElement('div')
-  const dateDiv = document.createElement('div')
-  const finishDiv = document.createElement('div')
-  const priorityDiv = document.createElement('div')
-
-  contentDiv.classList.add("content_div")
-  contentDiv.textContent = content
-  
-  dateDiv.classList.add("date_div") 
-  dateDiv.textContent = date
-  
-  const removeBtn = document.createElement('button');
-  removeBtn.classList.add("remove_btn");
-  removeBtn.textContent = "remove";
-
-  removeBtn.addEventListener('click', () => {
-    removeTDContainer(contentDiv.textContent, dateDiv.textContent, toDoContainer)
-  });
-  
-  toDoContainer.append(dateDiv, contentDiv, removeBtn )
-  toDoContainer.classList.add('to_do_container')
-  container.appendChild(toDoContainer)
-}
-
-function removeTDContainer(content, date, container) {
-  toDoList.removeFromList(content, date);
-  container.remove();
-  saveToLocal(); 
+function changeFinishStatus(index, container, secondContainer) {
+  toDoList.listArray[index].finish = !toDoList.listArray[index].finish
+  container.style.backgroundColor = "gray"
+  secondContainer.style.backgroundColor = "gray"
+  saveToLocal()
 }
 
 const dialogInterface = (function () {
   const dialogBtn = document.getElementById('dialog_btn')
   const submitBtn = document.getElementById('submit_btn')
   const contentInput = document.getElementById("content_input")
+  const contentInputBody = document.getElementById("content_input_body")
   const dateInput = document.getElementById("date_input")
   const priorityInput = document.getElementById("priority_input")
-  const form = document.querySelector('form')
+
+  const todayDate = format(`${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`, "yyyy-MM-dd")
+  dateInput.value = todayDate
   
   dialogBtn.addEventListener('click', () => {
     dialog.showModal() 
   })
   
+  const submitForm = () => {
+    if(contentInput.value) {
+      const inputValues = [contentInput.value, format(new Date(dateInput.value), 'dd-MM-yyyy'), false, priorityInput.value];
+      createTDElement(...inputValues);
+      toDoList.addToList(...inputValues);
+      contentInput.value = ""
+      contentInputBody.value = ""
+      saveToLocal();
+    }
+  }
+
   submitBtn.addEventListener('click', (e) => {
     e.preventDefault()
-    if (contentInput.value) {
-      createTDElement(contentInput.value, dateInput.value, false, priorityInput.value)
-      toDoList.addToList(contentInput.value, dateInput.value, false, priorityInput.value) 
-      form.reset()
-      saveToLocal()
-    }
+    submitForm()
   })
+
+  contentInputBody.addEventListener("input", () => {
+    contentInput.value = contentInputBody.value
+  })
+
+  if (contentInputBody) {
+    document.addEventListener('keydown', (event) => {
+      if (event.key === "Enter") {
+        submitForm()
+      }
+    })
+  }
+
 })()
 
 loadFromLocal()
 populateContainer()
-
-
-/* toDoList.addToList("hello", "14/05/2024", false, "urgent") 
-toDoList.addToList("my break up", "27/11/2024", false, "relax")
-toDoList.addToList("testing", "23/2/2025", true, "normal")
-
-saveToLocal() */

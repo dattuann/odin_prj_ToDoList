@@ -1,7 +1,117 @@
+:root {
+  --black: #000000;
+  --anta: "Anta", sans-serif;
+  --fellFrench: "IM Fell French Canon";
+  --petit: "Petit Formal Script";
+  --blueBtn: #dbe4ff; 
+  --urgentColor: #ffa94d;
+  --chillColor: #748ffc;
+  --relaxColor: #a9e34b;
+}
+
 body {
-  background-origin: padding-box;
+  height: 100vh;
+  background-color: var(--black);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  overflow-y: hidden;
+}
+
+header {
+  font-family: var(--anta);
+  font-weight: 400;
+  font-size: 64px;
+  height: 70px;
+}
+
+.insert_div, .container {
+  width: 50vw;
+  min-width: 400px; 
+}
+
+.insert_div {
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+  justify-content: center;
+  align-items: center;
+  input, button {
+    display: flex;
+    align-items: center;
+    border-radius: 32px;
+    height: 40px;
+    font-size: 3em;
+    place-content: center;
+    overflow-y: hidden;
+  }
+  input {
+    padding-left: 20px;
+    font-family: monospace;
+
+  }
+  button {
+    background-color: black;
+    border-color: white;
+    color: white;
+  }
+}
+
+.container {
+  background: linear-gradient(black, black) padding-box,
+              linear-gradient(to right, darkblue, darkorchid) border-box;
+  border: 4px solid transparent;
+  border-radius: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 500px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  gap: 10px;
 }
 
 .to_do_container {
-  border: 1px solid black;
+  width: 100%;  
+  height: fit-content;
+  display: grid;
+  gap: 10px;
+  grid-template-areas:
+  "content button"
+  "date priority";
+  grid-template-columns: 3fr 1fr;
+  .content_div, .date_div {
+    padding-left: 30px;
+  }
+  .content_div {
+    font-size: 32px;
+    display: block;
+    grid-area: content;
+  }
+  .content_div::first-letter {
+    text-transform: capitalize;
+  }
+  .remove_btn {
+    font-size: 16px;
+    grid-area: button;
+    width: fit-content;
+    height: fit-content;
+    color: white;
+    border: 0.5px solid white;
+    background-color: #000000;
+    justify-self: right;
+    margin: 0 30px;
+  }
+  .date_div {
+    grid-area: date;
+  }
+  .priority_div {
+    grid-area: priority;
+    padding-right: 30px;
+    justify-self: right;
+    margin: 0 30px;
+    font-size: 16px;
+    width: fit-content;
+  }
 }

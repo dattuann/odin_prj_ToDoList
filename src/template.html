@@ -3,24 +3,29 @@
 
     <head>
         <meta charset="utf-8" />
-        <title>Webpack App</title>
-    </head>
+        <title>To Do List</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Anta&family=IM+Fell+French+Canon:ital@0;1&family=Petit+Formal+Script&display=swap" rel="stylesheet">
     <body>
+      <header>to do this</header>
+      <div class="insert_div">
+        <input type="text" name="contentInpit" id="content_input_body" placeholder="do this:">
         <button id="dialog_btn">+</button>
-        <dialog id="dialog">
-          <form method="dialog">
-            <button formnovalidate autofocus>Close</button>
-            <input type="date" name="date_input" id="date_input">
-            <input type="text" name="content_input" id="content_input" placeholder="do this:" required>
-            <select name="priority" id="priority_input">
-              <option value="urgent">urgent</option>
-              <option value="chill" selected>chill</option>
-              <option value="relax">relax</option>
-            </select>
-            <input type="submit" value="Add ToDo" id="submit_btn">
-          </form>
-        </dialog>
-        <div class="container"></div>
-    </body>
-    
+      </div>
+      <dialog id="dialog">
+        <form method="dialog">
+          <button formnovalidate autofocus>Close</button>
+          <input type="date" name="date_input" id="date_input">
+          <input type="text" name="content_input" id="content_input" placeholder="do this:" required>
+          <select name="priority" id="priority_input">
+            <option value="urgent">urgent</option>
+            <option value="chill" selected>chill</option>
+            <option value="relax">relax</option>
+          </select>
+          <input type="submit" value="Add ToDo" id="submit_btn">
+        </form>
+      </dialog>
+      <div class="container"></div>
+  </body>
 </html>
