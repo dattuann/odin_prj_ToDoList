@@ -1,5 +1,5 @@
 import './style.css'
-import { format, secondsToHours } from 'date-fns'
+import { format } from 'date-fns'
 import createTDElement from './createTDElement'
 
 export const toDoList = (function () {
@@ -21,7 +21,29 @@ export const toDoList = (function () {
     findIndexInList(content, date, index => listArray.splice(index, 1)); 
   }
   
-  return { listArray, addToList, removeFromList }
+  function toggleFinishStatus(content, date) {
+    findIndexInList(content, date, index => {
+      listArray[index].finish = !listArray[index].finish
+    })
+  }
+
+  function togglePriorityStatus(content, date) {
+    findIndexInList(content, date, index => {
+      switch (listArray[index].priority) {
+        case "chill":
+          listArray[index].priority = "urgent"
+          break;
+        case "urgent":
+          listArray[index].priority = "relax"
+          break
+        default:
+          listArray[index].priority = "chill"
+          break;
+      }
+    })
+  }
+
+  return { listArray, addToList, removeFromList, toggleFinishStatus, findIndexInList, togglePriorityStatus }
 })()
 
 export function saveToLocal() {
@@ -43,13 +65,6 @@ function populateContainer() {
   toDoList.listArray.forEach(element => {
     createTDElement(element.content, element.date, element.finish, element.priority)
   });
-}
-
-function changeFinishStatus(index, container, secondContainer) {
-  toDoList.listArray[index].finish = !toDoList.listArray[index].finish
-  container.style.backgroundColor = "gray"
-  secondContainer.style.backgroundColor = "gray"
-  saveToLocal()
 }
 
 const dialogInterface = (function () {
@@ -75,6 +90,7 @@ const dialogInterface = (function () {
       contentInput.value = ""
       contentInputBody.value = ""
       saveToLocal();
+      document.querySelector('.container').scrollTo(0, document.querySelector('.container').scrollHeight);
     }
   }
 
@@ -90,6 +106,7 @@ const dialogInterface = (function () {
   if (contentInputBody) {
     document.addEventListener('keydown', (event) => {
       if (event.key === "Enter") {
+        event.preventDefault()
         submitForm()
       }
     })

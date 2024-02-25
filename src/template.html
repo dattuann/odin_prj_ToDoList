@@ -10,21 +10,23 @@
     <body>
       <header>to do this</header>
       <div class="insert_div">
-        <input type="text" name="contentInpit" id="content_input_body" placeholder="do this:">
+        <input type="text" name="contentInpit" id="content_input_body" placeholder="do this:" autocomplete="off">
         <button id="dialog_btn">+</button>
       </div>
       <dialog id="dialog">
-        <form method="dialog">
-          <button formnovalidate autofocus>Close</button>
-          <input type="date" name="date_input" id="date_input">
-          <input type="text" name="content_input" id="content_input" placeholder="do this:" required>
-          <select name="priority" id="priority_input">
-            <option value="urgent">urgent</option>
-            <option value="chill" selected>chill</option>
-            <option value="relax">relax</option>
-          </select>
-          <input type="submit" value="Add ToDo" id="submit_btn">
-        </form>
+        <form_container>
+          <form method="dialog">
+            <button formnovalidate autofocus>Close</button>
+            <input type="date" name="date_input" id="date_input">
+            <input type="text" name="content_input" id="content_input" placeholder="do this:" autocomplete="off" required>
+            <select name="priority" id="priority_input">
+              <option value="urgent">urgent</option>
+              <option value="chill" selected>chill</option>
+              <option value="relax">relax</option>
+            </select>
+            <input type="submit" value="Add ToDo" id="submit_btn">
+          </form>
+        </form_container>
       </dialog>
       <div class="container"></div>
   </body>

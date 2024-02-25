@@ -65,15 +65,15 @@ header {
   border-radius: 32px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   height: 500px;
   overflow-y: auto;
   overflow-x: hidden;
-  gap: 10px;
+  user-select: none;
+  gap: 5px;
 }
 
 .to_do_container {
-  width: 100%;  
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;  width: 100%;  
   height: fit-content;
   display: grid;
   gap: 10px;
@@ -88,6 +88,7 @@ header {
     font-size: 32px;
     display: block;
     grid-area: content;
+    cursor: pointer;
   }
   .content_div::first-letter {
     text-transform: capitalize;
@@ -102,16 +103,35 @@ header {
     background-color: #000000;
     justify-self: right;
     margin: 0 30px;
+    cursor: pointer;
   }
   .date_div {
     grid-area: date;
   }
   .priority_div {
     grid-area: priority;
-    padding-right: 30px;
     justify-self: right;
     margin: 0 30px;
     font-size: 16px;
     width: fit-content;
+    cursor: pointer;
   }
+}
+
+dialog {
+  background-color: black;
+  form {
+    display: flex;
+    flex-direction: column;
+    width: 60vw;
+    button, #content_input, select {
+      background-color: black;
+      color: white;
+    }
+  }
+}
+
+::backdrop {
+  background-image: linear-gradient( darkblue, darkorchid); 
+  opacity: 0.75;
 }
