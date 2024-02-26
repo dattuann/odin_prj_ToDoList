@@ -149,6 +149,9 @@ header {
     cursor: pointer;
     z-index: 0;
   }
+
+  .drop_down_btn, .priority_div {
+  }
 }
 
 dialog {
