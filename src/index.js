@@ -1,5 +1,5 @@
 import './style.css'
-import { format } from 'date-fns'
+import { format, parse } from 'date-fns'
 import createTDElement from './createTDElement'
 
 export const toDoList = (function () {
@@ -43,7 +43,14 @@ export const toDoList = (function () {
     })
   }
 
-  return { listArray, addToList, removeFromList, toggleFinishStatus, findIndexInList, togglePriorityStatus }
+  function modifyToDo(content, date, newContent, newDate) {
+    findIndexInList(content, date, index => {
+      listArray[index].content = newContent
+      listArray[index].date = format(new Date(newDate), "dd-MM-yyyy")
+    })
+  }
+
+  return { listArray, addToList, removeFromList, toggleFinishStatus, findIndexInList, togglePriorityStatus, modifyToDo }
 })()
 
 export function saveToLocal() {
@@ -67,7 +74,7 @@ function populateContainer() {
   });
 }
 
-const dialogInterface = (function () {
+export const dialogInterface = (function () {
   const dialogBtn = document.getElementById('dialog_btn')
   const submitBtn = document.getElementById('submit_btn')
   const contentInput = document.getElementById("content_input")
@@ -111,6 +118,8 @@ const dialogInterface = (function () {
       }
     })
   }
+
+  return {submitForm, submitBtn, contentInput, dateInput, priorityInput}
 
 })()
 

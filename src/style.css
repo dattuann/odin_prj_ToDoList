@@ -73,6 +73,7 @@ header {
 }
 
 .to_do_container {
+  z-index: 0;
   box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;  width: 100%;  
   height: fit-content;
   display: grid;
@@ -84,30 +85,58 @@ header {
   .content_div, .date_div {
     padding-left: 30px;
   }
+
   .content_div {
     font-size: 32px;
-    display: block;
     grid-area: content;
     cursor: pointer;
   }
+
+  #content_div_editing {
+    background-color: grey;
+    cursor: auto;
+    font-family: serif;
+    color: white;
+  }
+
+  #date_div_editing {
+    background-color: grey;
+    color: white;
+  }
+
   .content_div::first-letter {
     text-transform: capitalize;
   }
-  .remove_btn {
-    font-size: 16px;
+
+  .drop_down {
+    display: flex;
+    flex-direction: column;
     grid-area: button;
-    width: fit-content;
-    height: fit-content;
+    align-items: end;
+    justify-self: right;
+    margin: 0 30px;
+  }
+  
+  .drop_down_btn, .remove_btn, .edit_btn {
     color: white;
     border: 0.5px solid white;
     background-color: #000000;
-    justify-self: right;
-    margin: 0 30px;
     cursor: pointer;
+    font-size: 16px;
   }
+
+  .drop_down_div {
+    display: none;
+    position: relative;
+    flex-direction: column;
+    background-color: black;
+    z-index: 1;
+  }
+
   .date_div {
     grid-area: date;
   }
+
   .priority_div {
     grid-area: priority;
     justify-self: right;
@@ -115,6 +144,7 @@ header {
     font-size: 16px;
     width: fit-content;
     cursor: pointer;
+    z-index: 0;
   }
 }
 

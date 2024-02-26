@@ -1,5 +1,6 @@
 import { saveToLocal } from ".";
 import { toDoList } from ".";
+import { format, parse } from "date-fns";
 
 export default function createTDElement(content, date, finish, priority) {
   const container = document.querySelector('.container') 
@@ -72,9 +73,44 @@ export default function createTDElement(content, date, finish, priority) {
     saveToLocal()
   })
 
+  const dropDown = document.createElement('div')
+  const dropDownBtn = document.createElement('button')
+  const dropDownDiv = document.createElement('div')
+  const editBtn = document.createElement('button')
   const removeBtn = document.createElement('button');
+
+  dropDown.classList.add("drop_down")
+  dropDownBtn.classList.add('drop_down_btn')
+  dropDownDiv.classList.add('drop_down_div')
+  editBtn.classList.add("edit_btn")
   removeBtn.classList.add("remove_btn");
-  removeBtn.textContent = "x";
+
+  dropDownBtn.textContent = "..."
+  editBtn.textContent = "edit"
+  removeBtn.textContent = "delete";
+
+  dropDown.append(dropDownBtn, dropDownDiv)
+  dropDownDiv.append(editBtn, removeBtn) 
+  
+  dropDownDiv.style.display = "none"
+
+  dropDownBtn.addEventListener('click', (event) => {
+    event.stopPropagation()
+    if (dropDownDiv.style.display === "flex") {
+      dropDownDiv.style.display = "none";
+    } else if (dropDownDiv.style.display === "none") {
+      dropDownDiv.style.display = "flex"
+      document.addEventListener('click', () => {
+        dropDownDiv.style.display = "none" 
+      })
+    }
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!dropDownDiv.contains(event.target) && dropDownDiv.style.display === "flex") {
+      dropDownDiv.style.display = "none";
+    }
+  });
 
   removeBtn.addEventListener('click', () => {
     toDoList.removeFromList(content, date);
@@ -82,7 +118,51 @@ export default function createTDElement(content, date, finish, priority) {
     saveToLocal(); 
   });
   
-  toDoContainer.append(dateDiv, contentDiv, removeBtn, priorityDiv)
+  editBtn.addEventListener("click", () => {
+    const content = contentDiv.textContent
+    const date = dateDiv.textContent
+
+    const contentDivEditing = document.createElement('textarea')
+    contentDivEditing.classList.add("content_div")
+    contentDivEditing.id = "content_div_editing"
+    contentDivEditing.setAttribute("type", "text")
+    contentDivEditing.value = contentDiv.textContent
+
+    const dateDivEditing = document.createElement('input')
+    dateDivEditing.classList.add("date_div")
+    dateDivEditing.id = "date_div_editing"
+    dateDivEditing.setAttribute("type", "date")
+
+    const parsedDate = parse(dateDiv.textContent, "dd-MM-yyyy", new Date())
+    dateDivEditing.value = format(parsedDate, "yyyy-MM-dd")  
+
+    contentDiv.remove()
+    dateDiv.remove()
+    toDoContainer.append(contentDivEditing, dateDivEditing)
+
+    if (contentDivEditing) {
+      document.addEventListener('keydown', (event) => {
+        if (event.key === "Enter") {
+          event.preventDefault()
+
+          toDoList.modifyToDo(content, date, contentDivEditing.value, dateDivEditing.value)
+          contentDiv.textContent = contentDivEditing.value
+          
+          const newDate = dateDivEditing.value
+          dateDiv.textContent = format(new Date(newDate), "dd-MM-yyyy");
+          
+          contentDivEditing.remove()
+          dateDivEditing.remove()
+
+          toDoContainer.append(dateDiv)
+          toDoContainer.append(contentDiv)
+          saveToLocal()
+        }
+      })
+    }
+  })
+
+  toDoContainer.append(dateDiv, contentDiv, dropDown, priorityDiv)
   toDoContainer.classList.add('to_do_container')
   container.appendChild(toDoContainer)
   coloringContainer()
