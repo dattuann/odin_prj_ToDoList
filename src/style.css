@@ -97,6 +97,9 @@ header {
     cursor: auto;
     font-family: serif;
     color: white;
+    height: max-content;
+    min-height: 70px;
+    overflow-y: scroll;
   }
 
   #date_div_editing {

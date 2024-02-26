@@ -92,25 +92,24 @@ export default function createTDElement(content, date, finish, priority) {
   dropDown.append(dropDownBtn, dropDownDiv)
   dropDownDiv.append(editBtn, removeBtn) 
   
-  dropDownDiv.style.display = "none"
-
   dropDownBtn.addEventListener('click', (event) => {
-    event.stopPropagation()
+    event.stopPropagation();
+    const allDropDownDivs = document.querySelectorAll('.drop_down_div');
+    allDropDownDivs.forEach(div => {
+      if (div !== dropDownDiv) {
+        div.style.display = "none";
+      }
+    });
     if (dropDownDiv.style.display === "flex") {
       dropDownDiv.style.display = "none";
-    } else if (dropDownDiv.style.display === "none") {
-      dropDownDiv.style.display = "flex"
-      document.addEventListener('click', () => {
-        dropDownDiv.style.display = "none" 
-      })
+    } else {
+      dropDownDiv.style.display = "flex";
     }
   });
-
-  document.addEventListener('click', (event) => {
-    if (!dropDownDiv.contains(event.target) && dropDownDiv.style.display === "flex") {
-      dropDownDiv.style.display = "none";
-    }
-  });
+ 
+  document.addEventListener('click', () => {
+    dropDownDiv.style.display = "none" 
+  })
 
   removeBtn.addEventListener('click', () => {
     toDoList.removeFromList(content, date);
@@ -122,11 +121,12 @@ export default function createTDElement(content, date, finish, priority) {
     const content = contentDiv.textContent
     const date = dateDiv.textContent
 
-    const contentDivEditing = document.createElement('textarea')
+    const contentDivEditing = document.createElement('span')
     contentDivEditing.classList.add("content_div")
     contentDivEditing.id = "content_div_editing"
-    contentDivEditing.setAttribute("type", "text")
-    contentDivEditing.value = contentDiv.textContent
+    contentDivEditing.setAttribute("role", "textbox")
+    contentDivEditing.setAttribute("contenteditable", "true")
+    contentDivEditing.textContent = contentDiv.textContent
 
     const dateDivEditing = document.createElement('input')
     dateDivEditing.classList.add("date_div")
@@ -145,8 +145,8 @@ export default function createTDElement(content, date, finish, priority) {
         if (event.key === "Enter") {
           event.preventDefault()
 
-          toDoList.modifyToDo(content, date, contentDivEditing.value, dateDivEditing.value)
-          contentDiv.textContent = contentDivEditing.value
+          toDoList.modifyToDo(content, date, contentDivEditing.textContent, dateDivEditing.value)
+          contentDiv.textContent = contentDivEditing.textContent
           
           const newDate = dateDivEditing.value
           dateDiv.textContent = format(new Date(newDate), "dd-MM-yyyy");
@@ -162,8 +162,8 @@ export default function createTDElement(content, date, finish, priority) {
     }
   })
 
-  toDoContainer.append(dateDiv, contentDiv, dropDown, priorityDiv)
   toDoContainer.classList.add('to_do_container')
+  toDoContainer.append(dateDiv, contentDiv, dropDown, priorityDiv)
   container.appendChild(toDoContainer)
   coloringContainer()
   lineThroughContainer()
